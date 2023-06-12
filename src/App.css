@@ -1,5 +1,122 @@
+@font-face {
+  font-family: SpaceMono;
+  src: url(./assets/fonts/SpaceMono-Bold.ttf);
+}
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+.main-body {
+  width:100vw;
+  height:100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #c5e4e7;
+}
+.splitter {
+  width: 86.66px;
+  height: 53.14px;
+}
+.container {
+  margin-top: 87.86px;
+  width:920px;
+  height:481px;
+  background: #FFFFFF;
+  box-shadow: 0px 32px 43px rgba(79, 166, 175, 0.200735);
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.left-side {
+  width: 379px;
+  height:388px;
+  position: relative;
+  margin-left: 48px;
+}
+.common-icon-size {
+  height: 15.456000328063965px;
+  width: 9.84000015258789px;
+  border-radius: 0px;
+}
+.dollar {
+  position: absolute;
+  top:calc(91.87px - 50px);
+  left: calc(67.26px - 48px)
+}
+.person {
+  position: absolute;
+  top:355px;
+  left: calc(67.26px - 48px)
+}
+label {
+  display: block;
+  font-size: 16px;
+  color:#5E7A7D;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+input {
+  appearance: textfield; 
+  height: 48px;
+  font-family: SpaceMono;
+  background-color: #F3F9FA;
+  border: 0;
+  font-size:24px;
+  padding-right:17px;
+  border-radius: 5px;
+  color: #00474B;
+  /* this removes the up and down buttons in the input with the type of number */
+}
+input:active , input:focus {
+  border:0;
+  outline: 0;
+}
+.firstLast {
+  width:100%;
+}
+.mt-40 {
+  margin-top: 40px;
+}
+.Whole-percent-box {
+  width:100%;
+  height:128px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.percent-box {
+  height: 48px;
+  width: 117px;
+  border-radius: 5px;
+  margin-left:14px;
+  background-color: #00474B;
+  color:white;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  font-family: SpaceMono;
+  font-size: 24px;
+}
+#Tip {
+  width:117px;
+  margin-left: 14px;
+  margin-top: 16px;
+}
+.percent-box:first-child,.percent-box:nth-child(4){
+  margin-left:0;
+}
+.percent-box:nth-child(4), .percent-box:nth-child(5) {
+  margin-top:16px;
+}
+.right-side {
+  width:413px;
+  height:417px;
+  background-color: #00474B;
+  margin-right: 32px;
+  border-radius: 15px;
+}
+

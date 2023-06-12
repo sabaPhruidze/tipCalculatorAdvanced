@@ -1,6 +1,9 @@
 import { useReducer, useRef } from "react";
 import "./App.css";
 
+import SPLITTER from "./assets/SPLITTER.png";
+import DOLLAR from "./assets/icons/icon-dollar.svg";
+import PERSON from "./assets/icons/icon-person.svg";
 type initialState = {
   bill: number;
   tip: number;
@@ -54,8 +57,8 @@ function App() {
   const total =
     allRight && ((start.bill * (1 + start.tip)) / start.nop).toFixed(2);
 
-  const showTotal = !(TipCalculation === "NaN");
-  const showTip = !(TipCalculation === "NaN");
+  const showTotal = !(total === "NaN" || total === "Infinity");
+  const showTip = !(TipCalculation === "NaN" || TipCalculation === "Infinity");
   type TipData = {
     value: number;
     content: string;
@@ -84,57 +87,80 @@ function App() {
   ];
   console.log(whenRef.current);
   return (
-    <div>
-      <input
-        type="number"
-        value={start.bill}
-        onChange={(e) => {
-          const value = e.target.valueAsNumber;
-          dispatchUse("GetBillValue", value);
-        }}
-      />
-      <p>{start.bill}</p>
-      <div>
-        {tipData.map((data: any, idx: number) => (
-          <div
-            key={idx}
-            onClick={() => {
-              const value = data.value;
-              dispatchUse("GetTipValue", value);
-              whenRef.current = false;
+    <div className="main-body">
+      <img src={SPLITTER} className="splitter" />
+      <div className="container">
+        <div className="left-side">
+          <img src={DOLLAR} alt="dollar" className="common-icon-size dollar" />
+          <img src={PERSON} alt="person" className="common-icon-size person" />
+          <label htmlFor="bill">Bill</label>
+          <input
+            className="firstLast"
+            type="number"
+            value={start.bill}
+            id="bill"
+            onChange={(e) => {
+              const value = e.target.valueAsNumber;
+              dispatchUse("GetBillValue", value);
             }}
-          >
-            {data.content}
-            {data.TipbolChange}
-          </div>
-        ))}
+            dir="rtl"
+          />
+          <label htmlFor="Tip" className="mt-40">
+            Select Tip %
+          </label>
+          <div className="Whole-percent-box">
+            {tipData.map((data: any, idx: number) => (
+              <div
+                key={idx}
+                onClick={() => {
+                  const value = data.value;
+                  dispatchUse("GetTipValue", value);
+                  whenRef.current = false;
+                }}
+                className="percent-box"
+              >
+                {data.content}
+                {data.TipbolChange}
+              </div>
+            ))}
 
-        <p>{start.tip}</p>
-        <input
-          type="number"
-          min={0}
-          max={100}
-          value={whenRef.current ? start.tip && start.tip * 100 : ""}
-          onChange={(e) => {
-            const value = Math.min(Math.max(e.target.valueAsNumber, 0), 100); // Clamp the value between 0 and 100
-            dispatchUse("ChangePercent", value / 100);
-            whenRef.current = true;
-          }}
-        />
-      </div>
-      <input
-        type="number"
-        value={start.nop}
-        onChange={(e) => {
-          const value = e.target.valueAsNumber;
-          dispatchUse("GetNOP", value);
-        }}
-      />
-      <p>{start.nop}</p>
-      <div>
-        {showTip ? TipCalculation : "0.00"}
-        <br />
-        {showTotal ? total : "0.00"}
+            <input
+              type="number"
+              min={0}
+              id="Tip"
+              max={100}
+              value={whenRef.current ? start.tip && start.tip * 100 : "0"}
+              onChange={(e) => {
+                const value = Math.min(
+                  Math.max(e.target.valueAsNumber, 0),
+                  100
+                ); // Clamp the value between 0 and 100
+                dispatchUse("ChangePercent", value / 100);
+                whenRef.current = true;
+              }}
+              dir="rtl" // this make it write from right to left
+            />
+          </div>
+          <label htmlFor="people" className="mt-40">
+            Number of People
+          </label>
+          <input
+            className="firstLast"
+            type="number"
+            id="people"
+            value={start.nop}
+            dir="rtl"
+            onChange={(e) => {
+              const value = e.target.valueAsNumber;
+              dispatchUse("GetNOP", value);
+            }}
+          />
+        </div>
+        <div className="right-side">
+          {showTip ? TipCalculation : "0.00"}
+          <br />
+          {showTotal ? total : "0.00"}
+        </div>
       </div>
     </div>
   );
