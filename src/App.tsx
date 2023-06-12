@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useRef } from "react";
 import "./App.css";
 
 type initialState = {
@@ -24,6 +24,7 @@ const reducer = (state: State, action: actionType) => {
       return change;
       break;
     case "GetTipValue":
+    case "ChangePercent":
       change.tip = action.payload;
       return change;
       break;
@@ -38,6 +39,7 @@ const reducer = (state: State, action: actionType) => {
 
 function App() {
   const [start, dispatch] = useReducer(reducer, initialState);
+  const whenRef = useRef<boolean>(false);
   function dispatchUse(type: string, payload: number) {
     dispatch({
       type: type,
@@ -54,6 +56,33 @@ function App() {
 
   const showTotal = !(TipCalculation === "NaN");
   const showTip = !(TipCalculation === "NaN");
+  type TipData = {
+    value: number;
+    content: string;
+  }[];
+  const tipData: TipData = [
+    {
+      value: 0.05,
+      content: "5%",
+    },
+    {
+      value: 0.1,
+      content: "10%",
+    },
+    {
+      value: 0.15,
+      content: "15%",
+    },
+    {
+      value: 0.25,
+      content: "25%",
+    },
+    {
+      value: 0.5,
+      content: "50%",
+    },
+  ];
+  console.log(whenRef.current);
   return (
     <div>
       <input
@@ -66,15 +95,32 @@ function App() {
       />
       <p>{start.bill}</p>
       <div>
-        <div
-          onClick={() => {
-            const value = 0.05;
-            dispatchUse("GetTipValue", value);
-          }}
-        >
-          5%
-        </div>
+        {tipData.map((data: any, idx: number) => (
+          <div
+            key={idx}
+            onClick={() => {
+              const value = data.value;
+              dispatchUse("GetTipValue", value);
+              whenRef.current = false;
+            }}
+          >
+            {data.content}
+            {data.TipbolChange}
+          </div>
+        ))}
+
         <p>{start.tip}</p>
+        <input
+          type="number"
+          min={0}
+          max={100}
+          value={whenRef.current ? start.tip && start.tip * 100 : ""}
+          onChange={(e) => {
+            const value = Math.min(Math.max(e.target.valueAsNumber, 0), 100); // Clamp the value between 0 and 100
+            dispatchUse("ChangePercent", value / 100);
+            whenRef.current = true;
+          }}
+        />
       </div>
       <input
         type="number"
@@ -85,7 +131,6 @@ function App() {
         }}
       />
       <p>{start.nop}</p>
-
       <div>
         {showTip ? TipCalculation : "0.00"}
         <br />
