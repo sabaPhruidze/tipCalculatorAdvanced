@@ -99,6 +99,7 @@ function App() {
             type="number"
             value={start.bill}
             id="bill"
+            style={{ color: start.bill === 0 ? "#a1bdbf" : "#00474B" }}
             onChange={(e) => {
               const value = e.target.valueAsNumber;
               dispatchUse("GetBillValue", value);
@@ -129,7 +130,8 @@ function App() {
               min={0}
               id="Tip"
               max={100}
-              value={whenRef.current ? start.tip && start.tip * 100 : "0"}
+              value={whenRef.current ? start.tip && start.tip * 100 : ""}
+              placeholder="Custom"
               onChange={(e) => {
                 const value = Math.min(
                   Math.max(e.target.valueAsNumber, 0),
@@ -150,6 +152,7 @@ function App() {
             id="people"
             value={start.nop}
             dir="rtl"
+            style={{ color: start.nop === 0 ? "#a1bdbf" : "#00474B" }}
             onChange={(e) => {
               const value = e.target.valueAsNumber;
               dispatchUse("GetNOP", value);

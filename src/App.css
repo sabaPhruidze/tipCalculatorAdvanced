@@ -100,6 +100,7 @@ input:active , input:focus {
   align-items: center;
   font-family: SpaceMono;
   font-size: 24px;
+  cursor: pointer;
 }
 #Tip {
   width:117px;
