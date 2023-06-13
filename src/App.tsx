@@ -56,7 +56,7 @@ function App() {
         payload: payload,
       });
     },
-    [dispatch]
+    [dispatch] // So when the dispach changes this function will be called else it won't which will improve the performance of the app
   );
 
   const allRight = useMemo(
@@ -142,8 +142,6 @@ function App() {
     [showTip, TipCalculation, showTotal, total]
   );
 
-  console.log(whenRef.current);
-
   return (
     <div className="main-body">
       <img src={SPLITTER} className="splitter" />
@@ -155,9 +153,14 @@ function App() {
           <input
             className="firstLast"
             type="number"
-            value={start.bill !== 0 && start.bill !== null ? start.bill : ""}
+            value={start.bill !== null ? start.bill : ""}
             placeholder="0"
             id="bill"
+            onKeyDown={(e) => {
+              if (e.key === "." || e.key === ",") {
+                e.preventDefault();
+              }
+            }}
             ref={billRef}
             onChange={(e) => {
               const value = e.target.valueAsNumber;
@@ -195,6 +198,11 @@ function App() {
               id="Tip"
               max={100}
               ref={tipRef}
+              onKeyDown={(e) => {
+                if (e.key === "." || e.key === ",") {
+                  e.preventDefault();
+                }
+              }}
               value={
                 whenRef.current && start.tip !== 0 && start.tip !== null
                   ? start.tip * 100
@@ -214,7 +222,7 @@ function App() {
                   e.target.style.border = "1px solid green";
                 }
               }}
-              dir="rtl" // this make it write from right to left
+              dir="rtl" // this makes it write from right to left
             />
           </div>
           <label htmlFor="people" className="mt-40">
@@ -224,10 +232,15 @@ function App() {
             className="firstLast"
             type="number"
             id="people"
-            value={start.nop !== 0 && start.nop !== null ? start.nop : ""}
+            value={start.nop !== null ? start.nop : ""}
             placeholder="0"
             dir="rtl"
             ref={peopleRef}
+            onKeyDown={(e) => {
+              if (e.key === "." || e.key === ",") {
+                e.preventDefault();
+              }
+            }}
             onChange={(e) => {
               const value = e.target.valueAsNumber;
               dispatchUse("GetNOP", value);
