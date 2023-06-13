@@ -1,4 +1,4 @@
-import { useReducer, useRef, useMemo, useCallback } from "react";
+import { useReducer, useRef, useMemo, useCallback, useEffect } from "react";
 import "./App.css";
 
 import SPLITTER from "./assets/SPLITTER.png";
@@ -48,6 +48,7 @@ function App() {
   const billRef = useRef<any>();
   const tipRef = useRef<any>();
   const peopleRef = useRef<any>();
+  const buttonRef = useRef<any>();
 
   const dispatchUse = useCallback(
     (type: string, payload: number) => {
@@ -141,7 +142,19 @@ function App() {
     ],
     [showTip, TipCalculation, showTotal, total]
   );
-
+  useEffect(() => {
+    if (
+      (start.bill !== null && start.bill !== 0) ||
+      (start.tip !== null && start.tip !== 0) ||
+      (start.nop !== null && start.nop !== 0)
+    ) {
+      buttonRef.current.style.backgroundColor = "#9FE8DF";
+      buttonRef.current.style.color = "#00474B";
+    } else {
+      buttonRef.current.style.backgroundColor = "#0D686D";
+      buttonRef.current.style.color = "#096166";
+    }
+  }, [start.bill, start.tip, start.nop]);
   return (
     <div className="main-body">
       <img src={SPLITTER} className="splitter" />
@@ -273,6 +286,7 @@ function App() {
               tipRef.current.style.border = 0;
               peopleRef.current.style.border = 0;
             }}
+            ref={buttonRef}
           >
             RESET
           </button>

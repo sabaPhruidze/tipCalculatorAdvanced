@@ -166,7 +166,7 @@ color: #26C2AE;
   height: 48px;
   width: 333px;
   border-radius: 5px;
-  background-color: #26C2AE;
+  background-color: #0d686d;
   border: 0;
   transition: 0.5s;
   font-family: SpaceMono;
@@ -175,7 +175,7 @@ color: #26C2AE;
   font-size: 20px;
   line-height: 30px;
   text-align: center;
-  color: #00474B;
+  color: #085c61;
   cursor: pointer;
 }
 button:active, button:focus {
