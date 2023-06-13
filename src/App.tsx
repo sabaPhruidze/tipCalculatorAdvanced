@@ -238,7 +238,7 @@ function App() {
               dir="rtl" // this makes it write from right to left
             />
           </div>
-          <label htmlFor="people" className="mt-40">
+          <label htmlFor="people" className="mt-40 changer">
             Number of People
           </label>
           <input

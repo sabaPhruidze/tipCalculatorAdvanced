@@ -38,7 +38,7 @@
   margin-left: 48px;
 }
 .common-icon-size {
-  width: 9.84000015258789px;
+  
   border-radius: 0px;
   height: 15.456000328063965px;
 }
@@ -181,4 +181,77 @@ color: #26C2AE;
 button:active, button:focus {
   outline: 0;
   transform: scale(0.95);
+}
+
+@media (max-width: 440px) {
+  .container {
+    margin-top: 40.8px;
+    width:375px;
+    height:789px;
+    flex-direction: column;
+    padding: 32px;
+    box-sizing: border-box;
+  }
+  .firstLast {
+    width:calc(100% - 50px);
+  }
+  .mt-40 {
+    margin-top: 32px;
+  }
+  .changer {
+    margin-top:85px;
+  }
+  .percent-box {
+    width:146.63px;
+    height:48px;
+  }
+  .percent-box:nth-child(3), .percent-box:nth-child(4), .percent-box:nth-child(5) {
+    margin-top: 16px;
+  }
+  .percent-box:nth-child(3),.percent-box:nth-child(5) {
+    margin-left:0px;
+  }
+  .percent-box:nth-child(4){
+    margin-left:16px;
+    
+  }
+  #Tip {
+    width:147px;
+    margin-left: 18px;
+    margin-top: 16px;
+  }
+  .right-side {
+    width:327px;
+    height:257px;
+    background-color: #00474B;
+    margin-right: 0px;
+    
+  }
+  button {
+    margin-top: 0px;
+    height: 48px;
+    width: 250px;
+    border-radius: 5px;
+    background-color: #0d686d;
+    border: 0;
+    transition: 0.5s;
+    font-family: SpaceMono;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
+    color: #085c61;
+    cursor: pointer;
+  }
+  .person { 
+    top:385px;
+  }
+  .d-flex-row p {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 47px;
+  letter-spacing: -0.6666666865348816px;
+  text-align: right;
+    }
 }
