@@ -1,40 +1,42 @@
-import { useReducer, useRef } from "react";
+import { useReducer, useRef, useMemo, useCallback } from "react";
 import "./App.css";
 
 import SPLITTER from "./assets/SPLITTER.png";
 import DOLLAR from "./assets/icons/icon-dollar.svg";
 import PERSON from "./assets/icons/icon-person.svg";
+
 type initialState = {
-  bill: number;
-  tip: number;
-  nop: number; //number of people
+  bill: number | null;
+  tip: number | null;
+  nop: number | null; //number of people
 };
+
 type State = typeof initialState;
+
 type actionType = {
   type: string;
   payload: number;
 };
+
 const initialState: initialState = {
   bill: 0,
   tip: 0,
   nop: 0,
 };
+
 const reducer = (state: State, action: actionType) => {
   let change = { ...state };
   switch (action.type) {
     case "GetBillValue":
       change.bill = action.payload;
       return change;
-      break;
     case "GetTipValue":
     case "ChangePercent":
       change.tip = action.payload;
       return change;
-      break;
     case "GetNOP":
       change.nop = action.payload;
       return change;
-      break;
     default:
       return change;
   }
@@ -43,49 +45,105 @@ const reducer = (state: State, action: actionType) => {
 function App() {
   const [start, dispatch] = useReducer(reducer, initialState);
   const whenRef = useRef<boolean>(false);
-  function dispatchUse(type: string, payload: number) {
-    dispatch({
-      type: type,
-      payload: payload,
-    });
-  }
-  const allRight =
-    start.bill !== null && start.tip !== null && start.nop !== null;
+  const billRef = useRef<any>();
+  const tipRef = useRef<any>();
+  const peopleRef = useRef<any>();
 
-  const TipCalculation =
-    allRight && ((start.bill * start.tip) / start.nop).toFixed(2);
-  const total =
-    allRight && ((start.bill * (1 + start.tip)) / start.nop).toFixed(2);
+  const dispatchUse = useCallback(
+    (type: string, payload: number) => {
+      dispatch({
+        type: type,
+        payload: payload,
+      });
+    },
+    [dispatch]
+  );
 
-  const showTotal = !(total === "NaN" || total === "Infinity");
-  const showTip = !(TipCalculation === "NaN" || TipCalculation === "Infinity");
+  const allRight = useMemo(
+    () => start.bill !== null && start.tip !== null && start.nop !== null,
+    [start.bill, start.tip, start.nop]
+  );
+
+  const TipCalculation = useMemo(() => {
+    if (
+      allRight &&
+      start.bill !== null &&
+      start.tip !== null &&
+      start.nop !== null
+    ) {
+      return ((start.bill * start.tip) / start.nop).toFixed(2);
+    }
+    return "0.00";
+  }, [allRight, start.bill, start.tip, start.nop]);
+
+  const total = useMemo(() => {
+    if (
+      allRight &&
+      start.bill !== null &&
+      start.tip !== null &&
+      start.nop !== null
+    ) {
+      return ((start.bill * (1 + start.tip)) / start.nop).toFixed(2);
+    }
+    return "0.00";
+  }, [allRight, start.bill, start.tip, start.nop]);
+
+  const showTotal = useMemo(
+    () => !(total === "NaN" || total === "Infinity"),
+    [total]
+  );
+  const showTip = useMemo(
+    () => !(TipCalculation === "NaN" || TipCalculation === "Infinity"),
+    [TipCalculation]
+  );
+
   type TipData = {
     value: number;
     content: string;
   }[];
-  const tipData: TipData = [
-    {
-      value: 0.05,
-      content: "5%",
-    },
-    {
-      value: 0.1,
-      content: "10%",
-    },
-    {
-      value: 0.15,
-      content: "15%",
-    },
-    {
-      value: 0.25,
-      content: "25%",
-    },
-    {
-      value: 0.5,
-      content: "50%",
-    },
-  ];
+
+  const tipData: TipData = useMemo(
+    () => [
+      {
+        value: 0.05,
+        content: "5%",
+      },
+      {
+        value: 0.1,
+        content: "10%",
+      },
+      {
+        value: 0.15,
+        content: "15%",
+      },
+      {
+        value: 0.25,
+        content: "25%",
+      },
+      {
+        value: 0.5,
+        content: "50%",
+      },
+    ],
+    []
+  );
+
+  const rightSideData = useMemo(
+    () => [
+      {
+        name: "Tip Amount",
+        content: showTip ? TipCalculation : "0.00",
+      },
+      {
+        name: "Total",
+        content: showTotal ? total : "0.00",
+      },
+    ],
+    [showTip, TipCalculation, showTotal, total]
+  );
+
   console.log(whenRef.current);
+
   return (
     <div className="main-body">
       <img src={SPLITTER} className="splitter" />
@@ -97,12 +155,18 @@ function App() {
           <input
             className="firstLast"
             type="number"
-            value={start.bill}
+            value={start.bill !== 0 && start.bill !== null ? start.bill : ""}
+            placeholder="0"
             id="bill"
-            style={{ color: start.bill === 0 ? "#a1bdbf" : "#00474B" }}
+            ref={billRef}
             onChange={(e) => {
               const value = e.target.valueAsNumber;
               dispatchUse("GetBillValue", value);
+              if (value === 0) {
+                e.target.style.border = "1px solid red";
+              } else {
+                e.target.style.border = "1px solid green";
+              }
             }}
             dir="rtl"
           />
@@ -130,7 +194,12 @@ function App() {
               min={0}
               id="Tip"
               max={100}
-              value={whenRef.current ? start.tip && start.tip * 100 : ""}
+              ref={tipRef}
+              value={
+                whenRef.current && start.tip !== 0 && start.tip !== null
+                  ? start.tip * 100
+                  : ""
+              }
               placeholder="Custom"
               onChange={(e) => {
                 const value = Math.min(
@@ -139,6 +208,11 @@ function App() {
                 ); // Clamp the value between 0 and 100
                 dispatchUse("ChangePercent", value / 100);
                 whenRef.current = true;
+                if (value === 0) {
+                  e.target.style.border = "1px solid red";
+                } else {
+                  e.target.style.border = "1px solid green";
+                }
               }}
               dir="rtl" // this make it write from right to left
             />
@@ -150,19 +224,45 @@ function App() {
             className="firstLast"
             type="number"
             id="people"
-            value={start.nop}
+            value={start.nop !== 0 && start.nop !== null ? start.nop : ""}
+            placeholder="0"
             dir="rtl"
-            style={{ color: start.nop === 0 ? "#a1bdbf" : "#00474B" }}
+            ref={peopleRef}
             onChange={(e) => {
               const value = e.target.valueAsNumber;
               dispatchUse("GetNOP", value);
+              if (value === 0) {
+                e.target.style.border = "1px solid red";
+              } else {
+                e.target.style.border = "1px solid green";
+              }
             }}
           />
         </div>
         <div className="right-side">
-          {showTip ? TipCalculation : "0.00"}
-          <br />
-          {showTotal ? total : "0.00"}
+          <div>
+            {rightSideData.map((data: any, idx: number) => (
+              <div className="d-flex-row" key={idx}>
+                <div>
+                  <h4>{data.name}</h4>
+                  <h5>/ person</h5>
+                </div>
+                <p>${data.content}</p>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => {
+              dispatchUse("GetBillValue", 0);
+              dispatchUse("GetTipValue", 0);
+              dispatchUse("GetNOP", 0);
+              billRef.current.style.border = 0;
+              tipRef.current.style.border = 0;
+              peopleRef.current.style.border = 0;
+            }}
+          >
+            RESET
+          </button>
         </div>
       </div>
     </div>
