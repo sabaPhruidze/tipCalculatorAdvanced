@@ -155,6 +155,22 @@ function App() {
       buttonRef.current.style.color = "#096166";
     }
   }, [start.bill, start.tip, start.nop]);
+  function changeColor(Itemindex: number) {
+    const tipBoxes = document.getElementsByClassName("percent-box");
+    for (let i = 0; i < tipBoxes.length; i++) {
+      const tipBox = tipBoxes[i] as HTMLElement;
+      if (i === Itemindex) {
+        if (tipBox.classList.contains("active")) {
+          tipBox.classList.remove("active");
+        } else {
+          tipBox.classList.add("active");
+        }
+      } else {
+        tipBox.classList.remove("active");
+      }
+    }
+  }
+
   return (
     <div className="main-body">
       <img src={SPLITTER} className="splitter" />
@@ -193,15 +209,15 @@ function App() {
             {tipData.map((data: any, idx: number) => (
               <div
                 key={idx}
-                onClick={() => {
+                onClick={(e) => {
                   const value = data.value;
                   dispatchUse("GetTipValue", value);
                   whenRef.current = false;
+                  changeColor(idx);
                 }}
                 className="percent-box"
               >
                 {data.content}
-                {data.TipbolChange}
               </div>
             ))}
 
@@ -211,15 +227,10 @@ function App() {
               id="Tip"
               max={100}
               ref={tipRef}
-              onKeyDown={(e) => {
-                if (e.key === "." || e.key === ",") {
-                  e.preventDefault();
-                }
-              }}
               value={
                 whenRef.current && start.tip !== 0 && start.tip !== null
                   ? start.tip * 100
-                  : ""
+                  : 0
               }
               placeholder="Custom"
               onChange={(e) => {

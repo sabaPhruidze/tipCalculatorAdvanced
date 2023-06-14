@@ -183,6 +183,11 @@ button:active, button:focus {
   transform: scale(0.95);
 }
 
+.percent-box.active {
+  background-color: #26C2AE;
+  color: #00474B;
+}
+
 @media (max-width: 440px) {
   .container {
     margin-top: 40.8px;
