@@ -161,6 +161,15 @@ letter-spacing: -1px;
 color: #26C2AE;
 
 }
+.peoplediv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+  width: 100%;
+  margin-top: 40px
+}
  button {
   margin-top: 122px;
   height: 48px;
@@ -182,7 +191,11 @@ button:active, button:focus {
   outline: 0;
   transform: scale(0.95);
 }
+.can-not-be-zero {
+  color:#E17457;
+  font-family: SpaceMono;
 
+}
 .percent-box.active {
   background-color: #26C2AE;
   color: #00474B;
@@ -203,8 +216,17 @@ button:active, button:focus {
   .mt-40 {
     margin-top: 32px;
   }
+  .peoplediv {
+    margin-top:80px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    width: 87%;
+    box-sizing: border-box;
+  }
   .changer {
-    margin-top:85px;
+    margin-top:0px;
   }
   .percent-box {
     width:146.63px;

@@ -1,4 +1,11 @@
-import { useReducer, useRef, useMemo, useCallback, useEffect } from "react";
+import {
+  useReducer,
+  useRef,
+  useMemo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import "./App.css";
 
 import SPLITTER from "./assets/SPLITTER.png";
@@ -142,6 +149,7 @@ function App() {
     ],
     [showTip, TipCalculation, showTotal, total]
   );
+  const [PeoplenumberChange, setPeoplenumberChange] = useState<boolean>(false);
   useEffect(() => {
     if (
       (start.bill !== null && start.bill !== 0) ||
@@ -249,9 +257,16 @@ function App() {
               dir="rtl" // this makes it write from right to left
             />
           </div>
-          <label htmlFor="people" className="mt-40 changer">
-            Number of People
-          </label>
+          <div className="peoplediv">
+            <label htmlFor="people" className="changer">
+              Number of People
+            </label>
+            {start.nop === 0 && PeoplenumberChange ? (
+              <div className="can-not-be-zero">Can't be zero</div>
+            ) : (
+              ""
+            )}
+          </div>
           <input
             className="firstLast"
             type="number"
@@ -273,6 +288,7 @@ function App() {
               } else {
                 e.target.style.border = "1px solid green";
               }
+              setPeoplenumberChange(true);
             }}
           />
         </div>
@@ -296,6 +312,7 @@ function App() {
               billRef.current.style.border = 0;
               tipRef.current.style.border = 0;
               peopleRef.current.style.border = 0;
+              setPeoplenumberChange(false);
             }}
             ref={buttonRef}
           >
