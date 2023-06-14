@@ -209,7 +209,7 @@ function App() {
             {tipData.map((data: any, idx: number) => (
               <div
                 key={idx}
-                onClick={(e) => {
+                onClick={() => {
                   const value = data.value;
                   dispatchUse("GetTipValue", value);
                   whenRef.current = false;
